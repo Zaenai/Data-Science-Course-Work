@@ -1,2 +1,3 @@
 # Data-Science-Course-Work
-Course Work for UCPH's Data Science Course (15 ects, course code ndab18000u)
+Course Work for UCPH's Data Science Course
+https://kurser.ku.dk/course/ndab18000u/2020-2021
