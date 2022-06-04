@@ -21,7 +21,7 @@ def main():
     data = pd.read_csv(r"data/1mio-raw.csv", nrows = 100000)
     md.drop_useless_data(data)
 
-    process_list = proces.make_processes(data,numberOfProc,process_function)
+    process_list = proces.make_processes(data, numberOfProc, process_function)
     print(proces.run_proc(process_list))
 
 
