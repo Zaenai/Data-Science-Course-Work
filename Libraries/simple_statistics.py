@@ -2,7 +2,7 @@ import re
 import numpy as np
     
 #count number of sentences. (use before base clean)
-def get_get_num_sentences(content):
+def get_num_sentences(content):
     return content.map(get_num_sentences_in_text)
 
 def get_num_sentences_in_text(text):
