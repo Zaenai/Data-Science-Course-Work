@@ -2,18 +2,29 @@ from hashlib import new
 import pandas as pd
 import re
 import math
+import os
 
-#concatanate numberOfFiles csv named nameFormat 
+#concatanate numberOfFiles csv named nameFormat by rows
 # files and saves as targetName.csv
 # nameformat example: "data_partX"
-def conc_csv_Files(numberOfFiles,nameFormat, targetName):
+def conc_csvs_by_rows(numberOfFiles,nameFormat, targetName, deleteParts=True):
+    data = None
     for i in range(1,numberOfFiles+1):
         nameToRead = re.sub(r'X+', str(i), nameFormat)+".csv"
-        if (i==1): 
-            data = pd.read_csv(nameToRead)
+        if (i==1):
+            if(os.path.isfile(nameToRead)): 
+                data = pd.read_csv(nameToRead)
+                os.remove(nameToRead)
+            else: 
+                print("Error: file ", nameToRead, "does not exist ! ")
         else:
-            data = data.append(pd.read_csv(nameToRead),ignore_index=True)
+            if(os.path.isfile(nameToRead)): 
+                data = data.append(pd.read_csv(nameToRead),ignore_index=True)
+                os.remove(nameToRead)
+            else:
+                print("Error: file ", nameToRead, "does not exist ! ")
     data.to_csv(targetName+".csv", encoding='utf-8', index=False)
+
 
 #splits csv to numberOfFiles parts
 # nameformat example: "data_partX"
@@ -30,3 +41,24 @@ def split_csv(file,numberOfFiles,nameFormat):
         data_part.to_csv(new_name, encoding='utf-8', index=False)
 
 
+# concatanate numberOfFiles csv named nameFormat by columns 
+# files and saves as targetName.csv
+# nameformat example: "data_partX"
+def conc_csvs_by_columns(numberOfFiles,nameFormat, targetName, deleteParts=True):
+    data = None
+    for i in range(1,numberOfFiles+1):
+        nameToRead = re.sub(r'X+', str(i), nameFormat)+".csv"
+        if (i==1):
+            if(os.path.isfile(nameToRead)): 
+                data = pd.read_csv(nameToRead)
+                os.remove(nameToRead)
+            else: 
+                print("Error: file ", nameToRead, "does not exist ! ")
+        else:
+            if(os.path.isfile(nameToRead)): 
+                data = pd.concat([data,pd.read_csv(nameToRead)],ignore_index=True,axis=1)
+                os.remove(nameToRead)
+            else:
+                print("Error: file ", nameToRead, "does not exist ! ")
+        
+    data.to_csv(targetName+".csv", encoding='utf-8', index=False)

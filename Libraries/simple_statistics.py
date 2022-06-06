@@ -23,9 +23,19 @@ def vowel_count(word):
             count += 1
     return count
 
+vectorizer = CountVectorizer(stop_words='english')
+X = vectorizer.fit_transform([doc1,doc2,doc3])
 
-#calculates lexical div and avrg word length
-def lex_div_count(content):
+eng_stopwords = stopwords.words('english')
+
+
+#We get:
+#number of words 
+#average word length
+#vowel count which approximates the number of syllables (to be normalized to average number of vowels per word)
+#number of words with at least 3 vowels which are intuitively more complex words (to be normalized to ratio of complex words and the total number of words)
+#lexical diversity, ie. the ratio between the number of unique words and the total number of words
+def get_multi_features(content):
     result = np.empty(shape=(len(content), 5))
     word_count=0
     words_lengths = 0
