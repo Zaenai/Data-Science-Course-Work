@@ -23,10 +23,10 @@ def vowel_count(word):
             count += 1
     return count
 
-vectorizer = CountVectorizer(stop_words='english')
-X = vectorizer.fit_transform([doc1,doc2,doc3])
+# vectorizer = CountVectorizer(stop_words='english')
+# X = vectorizer.fit_transform([doc1,doc2,doc3])
 
-eng_stopwords = stopwords.words('english')
+# eng_stopwords = stopwords.words('english')
 
 
 #We get:
