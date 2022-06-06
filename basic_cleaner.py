@@ -28,20 +28,18 @@ def process_function(data,my_index):
 def main():
     numberOfProc = 8
 
-    data = pd.read_csv(r"data/1mio-raw.csv", nrows = 100000)
-    md.drop_useless_data(data)
+    #   Read data, drop usless ONLY content, title and type left!
+    # data = pd.read_csv(r"data/1mio-raw.csv" ,nrows = 1000)
+    # md.drop_useless_data(data)
+    # data = data.filter(['content', 'title','type'])
 
-    process_list = proces.make_processes(data, numberOfProc, process_function)
-    print(proces.run_proc(process_list))
+    #   use multiprocessing to make basic clean
+    # process_list = proces.make_processes(data, numberOfProc, process_function)
+    # print(proces.run_proc(process_list))
 
-    #checkFilesLengths(max_processes)
-    mcsv.conc_csv_Files(numberOfProc,"data/cleaned_partX","data/cleanedComplete")
-    mcsv.conc_csv_Files(numberOfProc,"data/content_featuresX","data/content_features_complete")
+    #   concatanate files
+    #mcsv.conc_csv_Files(numberOfProc,"data/cleaned_partX","data/BasicCleaned")
 
-    complete_data = pd.read_csv('data/cleanedComplete.csv')
-
-    print(data["content"][0])
-    print(complete_data["content"][0])
 
 if __name__ == '__main__':
     main()
