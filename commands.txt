@@ -1,0 +1,4 @@
+$ git stash --include-untracked
+$ git reset --hard
+$ git clean -fd
+$ git pull

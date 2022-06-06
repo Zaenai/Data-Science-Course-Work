@@ -39,8 +39,8 @@ def clean_column(data, col_name):
         for j in range (len(cleaned)):
             word = cleaned[j]
             # delete: " ' () .
-            # while(re.match(punct_quote,word)!=None):
-            #     word = re.sub(punct_quote,"",word)
+            while(re.match(punct_quote,word)!=None):
+                word = re.sub(punct_quote,"",word)
             #     print(cleaned[j]," changed to", word)
             #delete if <>, number, symbols etc.
             if (re.match(mix,word)!=None or len(word) < 2):
