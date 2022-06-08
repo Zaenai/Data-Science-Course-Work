@@ -8,7 +8,6 @@ def process_function(data,my_index):
     changeTypes(data)
     data.to_csv('data/newTypes_part'+str(my_index+1)+'.csv', encoding='utf-8', index=False)
 
-
 def isNonFake(t):
     return 1 if t in ["political", "reliable"] else 0
 
@@ -23,11 +22,11 @@ def main():
     #   specify number of rows to clean
     rows = 1000000
     #   specify name of new csv file with cleaned data
-    new_file_name = "NewTypesCleaned"
+    new_file_name = "NewTypesRaw"
 
     #   read data
-    data = pd.read_csv(r"data/BasicCleaned.csv",nrows = rows)
-    
+    data = pd.read_csv(r"data/raw.csv",nrows = rows)
+    data = data[["id","content","type"]]
     
     #   use multiprocessing to make basic clean
     process_list = proces.make_processes(data, numberOfProc, process_function)

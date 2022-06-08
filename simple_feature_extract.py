@@ -9,16 +9,19 @@ import Libraries.simple_statistics as statistics
 
 # gets a chunk of data, cleans it and saves as 
 def process_function(data,my_index):
+    # 1min for milion
     #data.dropna(subset = ["content"], inplace = True)
 
-    numb_of_sentences = pd.read_csv(r"features/FeaturesPreClean.csv" ,skiprows=data.first_valid_index(), skipfooter=data.last_valid_index())
+    numb_of_sentences = pd.read_csv(r"features/FeaturesPreClean.csv", skiprows=data.first_valid_index(), skipfooter=data.last_valid_index())
     numb_of_sentences = numb_of_sentences.iloc[:, 1]
     #numb_of_sentences = numb_of_sentences["num_sentences"]
     
     #Dataframe with content features
     df = pd.DataFrame()
-    df["avg_word_len"], df["lexical_diversity"], df["word_count"], df["vowel_count"], df["min_three_vowels"] = get_multi_features(data["content"]).T
-    print(df["word_count"])
+    df["id"] = data["id"]
+    df["type"] = data["type"]
+    df["avg_word_len"], df["lexical_diversity"], df["word_count"], df["vowel_count"], df["min_three_vowels"] = get_multi_features(data).T
+    #print(df["word_count"])
     
     #Normalizing features
     df["avg_sentence_len"] = df["word_count"]/numb_of_sentences
@@ -29,14 +32,21 @@ def process_function(data,my_index):
 
 def main():
     #   specify number of processes
-    numberOfProc = 8
+    numberOfProc = 10
     #   specify number of rows to clean
     rows = 1000000
     #   specify name of new csv file with cleaned data
-    new_file_name = "FeaturesLemmatized"#"FeaturesPostClean"
+    # choose one
+    new_file_name = "FeaturesPostClean"
+    #new_file_name = "FeaturesPostLemmatized"
 
-    #data = pd.read_csv(r"data/NewTypesCleaned.csv" ,nrows = rows)
+    #choose one
+    #data = pd.read_csv(r"data/BasicCleaned.csv" ,nrows = rows)
     data = pd.read_csv(r"data/Lemmatized.csv" ,nrows = rows)
+
+    data = data.filter(['id','content','type'])
+    data = data.astype({"id":'int32', "content":'object','type' : 'int8'})
+
     
     # use multiprocessing to make basic clean
     process_list = proces.make_processes(data, numberOfProc, process_function)
@@ -44,6 +54,7 @@ def main():
 
     # concatanate files
     mcsv.conc_csvs_by_rows(numberOfProc,"features/content_featuresX","features/"+new_file_name)
+    
 
 if __name__ == '__main__':
     main()

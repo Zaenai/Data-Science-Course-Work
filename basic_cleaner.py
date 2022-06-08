@@ -27,8 +27,9 @@ def main():
     # ONLY content, title and type left!
     data = pd.read_csv(r"data/ContentReadyToClean.csv" ,nrows = rows)
     md.drop_useless_data(data)
-    data = data.filter(['content','type'])
-    
+    data = data.filter(['id','content','type'])
+    data = data.astype({"id":'int32', "content":'object','type' : 'int8'})
+       
     print(type(data))
     # use multiprocessing to make basic clean
     process_list = proces.make_processes(data, numberOfProc, process_function)

@@ -16,35 +16,36 @@ def process_function(data,my_index):
     df["word_count"]= statistics.preclean_word_count(data["content"])
     #print("2")
     df["avg_sentence_len"] =df["word_count"]/df["num_sentences"] 
-
     
-    too_short_articles=[["shortIndex"]]
+    df["id"] = data["id"]
+
+    too_short_articles=[["shortID"]]
+    to_drop_now=[]
     for (index,num) in zip(df["num_sentences"].index, df["num_sentences"]):
         if(num <3):
-            too_short_articles.append([str(index)])
+            too_short_articles.append([str(data["id"][index])])
+            to_drop_now.append(data["id"][index])
     file = open('data/tooShort'+ str(my_index+1)+'.csv', 'w+', newline ='',encoding='UTF8') 
     with file:     
         write = csv.writer(file)
-        write.writerows(too_short_articles) 
-    
-    df.drop(axis=0, index= too_short_articles[1:])
-    df.filter(["avg_sentence_len","num_sentences"]).to_csv(f"features/featuresPreClean{my_index + 1}.csv", encoding='utf-8', index=False)
-
+        write.writerows(too_short_articles)
+    old_size = df.shape[0]
+    df.drop(axis=0, index= to_drop_now, inplace=True)
+    df.filter(["id","avg_sentence_len","num_sentences"]).to_csv(f"features/featuresPreClean{my_index + 1}.csv", encoding='utf-8', index=False)
+    print("diff= ",old_size-df.shape[0])
 def main():
-    # 14 sec for milion after drop
+    # 14 sec 
 
     #   specify number of processes
-    numberOfProc = 8
+    numberOfProc = 2
     #   specify number of rows to clean
     rows = 1000000
     #   specify name of new csv file with cleaned data
     new_file_name = "FeaturesPreClean"
     new_file_name_rows = "TooShort"
 
-    # Read data, drop usless 
-    # ONLY content, title and type left!
-    data = pd.read_csv(r"data/1mio-raw.csv" ,nrows = rows)
-    data = data.filter(['content'])
+    data = pd.read_csv(r"data/raw.csv" ,nrows = rows)
+    data = data.filter(['id','content','type'])
 
     # use multiprocessing 
     process_list = proces.make_processes(data, numberOfProc, process_function)

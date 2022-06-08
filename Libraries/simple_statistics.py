@@ -17,6 +17,7 @@ def get_num_sentences_in_text(text):
     for s in text.split("."):
         if s != "":
             sentence_count += 1
+    #if sentence_count == 0: return 1
     return sentence_count
 
 def count_words(text):
@@ -56,12 +57,12 @@ def vowel_cnt(word):
 #vowel count which approximates the number of syllables (to be normalized to average number of vowels per word)
 #number of words with at least 3 vowels which are intuitively more complex words (to be normalized to ratio of complex words and the total number of words)
 #lexical diversity, ie. the ratio between the number of unique words and the total number of words
-def get_multi_features(content):
-    result = np.empty(shape=(len(content), 5))
+def get_multi_features(data):
+    result = np.empty(shape=(len(data["content"]), 5))
     #for each article
     #for i,article in zip(range(len(content)),content):
     i = 0
-    for index,article in zip(content.index,content):
+    for id,article in zip(data["id"], data["content"]):
         if isinstance(article, str):
             words = article.split(" ")
             word_count=1
@@ -91,13 +92,7 @@ def get_multi_features(content):
             result[i][3] = vowel_count
             result[i][4] = min_three_vowels_count
         else:
-            print("empty at index: ", index)
-            
-            # file = open('data/NanContent'+ str(my_index+1)+'.csv', 'w+', newline ='',encoding='UTF8') 
-            # with file:
-            #     too_short_articles=[["NanContent"]]     
-            #     write = csv.writer(file)
-            #     write.writerows(too_short_articles) 
+            print(f"{id},")  
             result[i] = [0,0,1,0,0]
         i+=1
     return result

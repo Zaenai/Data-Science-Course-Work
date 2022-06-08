@@ -58,6 +58,8 @@ def process_function(data,my_index,retDict):
     #   save speech-part-ratio data as csv
     print("started saving counts")
     df = pd.DataFrame()
+    df["id"] = data["id"]
+    df["type"] = data["type"]
     df["verbs_ratio"] = verb_count
     df["noun_ratio"] = noun_count
     df["adjective_ratio"] = adjective_count
@@ -109,20 +111,22 @@ def print_text_distribution(data, col,type,numb_of_common):
 
 def main():
     # 45min for milion 
-
+    # 55min with id's 
     start_time = time.time()
     #   specify number of processes
     numberOfProc = 8
     #   specify number of rows to clean
     rows = 1000000
     #   specify name of csv to read from
-    csv_to_read_name = "NewTypesCleaned"
+    csv_to_read_name = "BasicCleaned"
     #   specify names of new csv file with cleaned data
     new_speach_parts_file_name = "Speech_Parts"
     new_lemmatized_file_name = "Lemmatized"
 
     #   read cleaned data with new types 
     data = pd.read_csv("data/"+csv_to_read_name+".csv" ,nrows=rows)
+    data = data.filter(['id','content','type'])
+    data = data.astype({"id":'int32', "content":'object','type' : 'int8'})
 
     # use multiprocessing to create speech parts ratio csv,
     # and return lemmatized data
@@ -138,7 +142,7 @@ def main():
     
     print("started concatanate speech-part files ")
     # concatanate speech-part csv files
-    mcsv.conc_csvs_by_rows(numberOfProc,"data/ver_noun_adjX","data/"+new_speach_parts_file_name)
+    mcsv.conc_csvs_by_rows(numberOfProc,"data/ver_noun_adjX","features/"+new_speach_parts_file_name)
 
     print("started concatanate lematized files ")
     # concatanate lemmatized csv files

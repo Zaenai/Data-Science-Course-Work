@@ -1,10 +1,10 @@
 preClean feature on raw data
 
+typer_changer on BasicCleaned
+
 row_dropper on raw data
 
 basic_cleaner on ReadyToClean
-
-typer_changer on BasicCleaned
 
 simple_feature on NewTypesCleaned
 

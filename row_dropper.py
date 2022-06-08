@@ -4,19 +4,36 @@ import Libraries.multiprocess as proces
 import Libraries.manage_csv as mcsv
 import Libraries.simple_statistics as statistics
 
+def findFstLst(lst,fst,last):
+    firstindx=0
+    lastindx = 0
+    for index,numb in zip(lst.index,lst):
+        if (numb >= fst) : 
+            firstindx = index 
+            break
+    for i in range (len(lst)-1,-1,-1):
+        if (lst[i] <= last): 
+            lastindx = i
+            break
+    return firstindx,lastindx
 
 def process_function(data,my_index):
+    
     old_rows = data.shape[0]
-    toDrop = pd.read_csv("data/tooShort.csv")["shortIndex"]
+    toDrop = pd.read_csv("data/tooShort.csv")["shortID"]
     toDrop = toDrop.astype(int)
+    toDrop.sort_values()
+    print("data indexes: ",data.first_valid_index()," ",data.last_valid_index())
+    fst,lst = findFstLst(toDrop,data.first_valid_index(),data.last_valid_index())
+    toDrop = toDrop[fst:lst]
+    print("rows to drop: ",len(toDrop))
+    print("process ",my_index," has indx list")
     for i in toDrop:
         try:
             data.drop(index=i, inplace = True)
-        except Exception as e:
-            pass
-    #data.drop(data.index[toDrop.tolist()], inplace = True)
-    # for index in toDrop:
-    #     data.drop(axis = "index", index= int(index))
+        except:
+             continue
+
     data.to_csv(f"data/contentReadyToClean{my_index + 1}.csv", encoding='utf-8', index=False)
     print("Difference:", data.shape[0]-old_rows)
 
@@ -32,8 +49,9 @@ def main():
 
     # Read data, drop usless 
     # ONLY content, title and type left!
-    data = pd.read_csv(r"data/1mio-raw.csv" ,nrows = rows)
-    data = data.filter(['content','type'])
+    data = pd.read_csv("data/NewTypesRaw.csv" ,nrows = rows)
+    data = data.filter(['id','content','type'])
+    data = data.astype({"id":'int32', "content":'object','type' : 'int8'})
 
     # use multiprocessing 
     process_list = proces.make_processes(data, numberOfProc, process_function)
