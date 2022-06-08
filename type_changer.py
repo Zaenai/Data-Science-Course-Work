@@ -18,18 +18,27 @@ def changeTypes(data):
 
 def main():
 
+    #   specify number of processes
     numberOfProc = 8
+    #   specify number of rows to clean
+    rows = 1000000
+    #   specify name of new csv file with cleaned data
+    new_file_name = "NewTypesCleaned"
 
-    # #   read data
-    # data = pd.read_csv(r"data/BasicCleanedMILION.csv",nrows = 100)
+    #   read data
+    data = pd.read_csv(r"data/BasicCleaned.csv",nrows = rows)
     
     
-    # #  use multiprocessing to make basic clean
-    # process_list = proces.make_processes(data, numberOfProc, process_function)
-    # print(proces.run_proc(process_list))
+    #   use multiprocessing to make basic clean
+    process_list = proces.make_processes(data, numberOfProc, process_function)
+    print(proces.run_proc(process_list))
 
-    # #   concatanate files
-    #mcsv.conc_csvs_by_rows(numberOfProc,"data/newTypes_partX","data/NewTypesCleanedMilion")
+    #   concatanate files
+    mcsv.conc_csvs_by_rows(numberOfProc,"data/newTypes_partX","data/"+new_file_name)
+
+    #   print size of csv after changing type
+    #new_data = pd.read_csv("data/"+new_file_name+".csv")
+    #print("Shape of data after changing type: ",new_data.shape)
 
 if __name__ == '__main__':
     main()

@@ -32,7 +32,7 @@ every = punct_quote+'|'+mix+'|'+multiple_chars
 def clean_column(data, col_name):    
     for i, entry in zip(data[col_name].index, data[col_name]):
         cleaned = initial_cleaner.transform([entry])[0]
-        
+        if(i%500):("500 done")
         cleaned = cleaned.split()
         #print(cleaned)
         #for each word

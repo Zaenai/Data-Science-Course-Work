@@ -1,0 +1,18 @@
+preClean feature on raw data
+
+row_dropper on raw data
+
+basic_cleaner on ReadyToClean
+
+typer_changer on BasicCleaned
+
+simple_feature on NewTypesCleaned
+
+speech_parts on NewTypesCleaned
+
+simple_feature on Lemmatized
+
+concatanate features* (pre_clean, after_clean, after lemmatization, speechParts)
+PCA on features
+
+create training data (relevant features with labels)

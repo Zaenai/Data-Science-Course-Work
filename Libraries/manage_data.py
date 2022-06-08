@@ -18,14 +18,14 @@ def split_data(data,numberOfParts):
 
 def drop_useless_data(data):
     #Dropping unneeded columns
-    cols_to_delete = ["Unnamed: 0","id","scraped_at","inserted_at","updated_at"]
-    for column in data.columns:
-        if data[column].isnull().values.all():
-            cols_to_delete.append(column)
-    data.drop(cols_to_delete, 1, inplace=True)
+    # cols_to_delete = ["Unnamed: 0","id","scraped_at","inserted_at","updated_at"]
+    # for column in data.columns:
+    #     if data[column].isnull().values.all():
+    #         cols_to_delete.append(column)
+    # data.drop(cols_to_delete, 1, inplace=True)
     
     #Dropping entries with nan type
-    data.dropna(subset = ["type"], inplace = True)
+    data.dropna(subset = ["type", "content"], inplace = True)
     #Dropping entries with unknown type
     data.drop(data.loc[data["type"] == "unknown"].index, inplace=True)
     print("rows after initial  drop:", data.shape[0])
