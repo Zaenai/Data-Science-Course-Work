@@ -1,5 +1,9 @@
 data/
 features/
+<<<<<<< HEAD
+commands.txt
+=======
 a.csv
 commands.txt
 Libraries/_pycache_
+>>>>>>> d5f53c9d62e1ccbec5846d12ad4f6161647c11cd

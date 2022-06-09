@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from pathlib import Path
 
 article_keyword_list = []
 keywords_dict = {"['']":0}
@@ -78,8 +77,8 @@ def get_csvs(data):
     articles_path = Path(r"C:\Users\Peter\Ny mappe\articles.csv")
     has_written_path = Path(r"C:\Users\Peter\Ny mappe\has_written.csv")
 
-    keywords_df.to_csv('data/keywords.csv', encoding='utf-8', index=False)
-    authors_df.to_csv('data/authors.csv', encoding='utf-8', index=False)
-    tags_df.to_csv('data/tags.csv', encoding='utf-8', index=False)
-    article_df.to_csv('data/article.csv', encoding='utf-8', index=False)
-    has_written_df.to_csv('data/has_written.csv', encoding='utf-8', index=False)
+    keywords_df.to_csv(keyword_combinations_path, index=False)
+    authors_df.to_csv(authors_path, index=False)
+    tags_df.to_csv(tags_path, index=False)
+    article_df.to_csv(articles_path, index=False)
+    has_written_df.to_csv(has_written_path, index=False)
