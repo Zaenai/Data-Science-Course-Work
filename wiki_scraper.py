@@ -4,6 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import Libraries.database_csv as csv
 
 
 def remove_tags(text):
@@ -202,6 +203,7 @@ def main():
 
             scraped_at.append(now.strftime("%d/%m/%Y %H:%M:%S"))
             Task4df = pd.DataFrame(data = {"Title" : titles,  "(Raw) No. Words" : numberOfWords, "(Raw) Avg. Word Length" : avg_words, "Date written" : dates, "Content": article_text, "Categories" : categories , "URL" : urls, "Sources" : sources, "Scraped at" : scraped_at})
-            print(Task4df)
+    print(Task4df)
+    Task4df.to_csv('data/wiki_scraped.csv', index=False)
 if __name__ == '__main__':
     main()
