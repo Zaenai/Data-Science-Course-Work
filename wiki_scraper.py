@@ -1,3 +1,4 @@
+import statistics
 import numpy as np
 import pandas as pd
 import re
@@ -100,7 +101,7 @@ def GrabArticle(url):
 
     words = article_text.split()
     avg_word = sum(len(word) for word in words) / len(words)
-    
+    avg_word = round(avg_word, 2)
 
     return date, srcs, title, article_text, categories, avg_word
 
@@ -183,27 +184,41 @@ def main():
 
     urls,dates,sources,titles,article_text,scraped_at,numberOfWords,categories,avg_words = [],[],[],[],[],[],[],[],[]
 
+    articlesq = []
+    statistics = []
+    statistics_id  = 0
+    article_id = 0
+    
     for articles in Articles:
         for url in articles:
             now = datetime.now()
             
             d,s,t,at,c,aw = GrabArticle(url)
             
-            urls.append(url)
-            
-            dates.append(d)
-            sources.append(s)
-            titles.append(t)
-            article_text.append(at)
-            categories.append(c)
-            
-            avg_words.append(aw)
-        
-            numberOfWords.append(len(at.split()))
+#            urls.append(url)
+#            
+#            dates.append(d)
+#            sources.append(s)
+#            titles.append(t)
+#            article_text.append(at)
+#            categories.append(c)
+#            
+#            avg_words.append(aw)
+#        
+#            numberOfWords.append(len(at.split()))
+#            scraped_at.append(now.strftime("%d/%m/%Y %H:%M:%S"))
+            articlesq.append([article_id, t, c, at, d, url, s, now.strftime("%d/%m/%Y %H:%M:%S")])
+            statistics.append([statistics_id,article_id,aw, len(at.split())])
+            statistics_id += 1
+            article_id += 1
+    
+    articlesq_df = pd.DataFrame(articlesq, columns=["id","titles","category","content", "date", "url", "source", "scraped_at"])
+    statistics_df = pd.DataFrame(statistics, columns=["id", "article_id", "avg_words", "numberofwords"])
+#    Task4df = pd.DataFrame(data = {"Title" : titles,  "(Raw) No. Words" : numberOfWords, "(Raw) Avg. Word Length" : avg_words, "Date written" : dates, "Content": article_text, "Categories" : categories , "URL" : urls, "Sources" : sources, "Scraped at" : scraped_at})
+    
+    articlesq_df.to_csv('data/wiki_articles', index=False)
+    statistics_df.to_csv('data/wiki_statistics', index=False)    
+#    Task4df.to_csv('data/wiki_scraped.csv', index=False)
 
-            scraped_at.append(now.strftime("%d/%m/%Y %H:%M:%S"))
-            Task4df = pd.DataFrame(data = {"Title" : titles,  "(Raw) No. Words" : numberOfWords, "(Raw) Avg. Word Length" : avg_words, "Date written" : dates, "Content": article_text, "Categories" : categories , "URL" : urls, "Sources" : sources, "Scraped at" : scraped_at})
-    print(Task4df)
-    Task4df.to_csv('data/wiki_scraped.csv', index=False)
 if __name__ == '__main__':
     main()
